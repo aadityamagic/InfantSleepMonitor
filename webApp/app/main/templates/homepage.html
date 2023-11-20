@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Data Nerds</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .logo {
+            max-width: 100px;
+        }
+        .header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+        .nav-options {
+            margin-top: 30px;
+        }
+        .content {
+            min-height: calc(100vh - 160px); /* Adjust according to your header and footer heights */
+        }
+        .footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+        .image-container {
+            text-align: left;
+        }
+        .custom-button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .custom-button:hover {
+            background-color: #0056b3;
+        }
+        .custom-button:active {
+            background-color: #00a74a; /* Green color for active state */
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <img src="placeholder.jpg" alt="Data Nerds Logo" class="logo">
+                </div>
+                <div class="col-md-8 text-left">
+                    <h1>Sleep Analytics for Children and Infants</h1>
+                    <div class="nav-options mt-3">
+                        <a href="#" class="btn btn-primary mx-2">Home</a>
+                        <a href="#" class="btn btn-primary mx-2">Analytics</a>
+                        <a href="#" class="btn btn-primary mx-2">About</a>
+                        <a href="#" class="btn btn-primary mx-2">Profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container content">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Actions</div>
+                    <div class="panel-body">
+                        <p>No Previous Runs Found. Please Run your dataset to view the Dashboard.</p>
+                        <button class="custom-button">Upload a File</button>
+                        <button class="custom-button">Run</button>
+                        <button class="custom-button">Analyze</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2023 Data Nerds. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Include Bootstrap JS and jQuery (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

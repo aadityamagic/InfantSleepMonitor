@@ -1,0 +1,31 @@
+<html>
+<head>
+    <title>Login Page</title>
+    <link rel="stylesheet" href="../static/login/style.css">
+</head>
+<body>
+
+<div class="main-box">
+
+    <img src="../static/login/user.png" class="avatar" alt="avatar">
+
+    <h1>Login Here</h1>
+
+    <form method="POST" action="{{ url_for('login') }}">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br>
+
+        <input type="submit" value="Login">
+
+        <a href="#">Continue With Google</a> <br>
+        <a href="signup">Don't have an account?</a>
+
+    </form>
+
+</div>
+
+</body>
+</html>
