@@ -48,6 +48,9 @@
         .custom-button:active {
             background-color: #00a74a; /* Green color for active state */
         }
+        .logout-button {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -64,6 +67,8 @@
                         <a href="/analytics" class="btn btn-primary mx-2">Analytics</a>
                         <a href="/about" class="btn btn-primary mx-2">About</a>
                         <a href="/profile" class="btn btn-primary mx-2">Profile</a>
+                        <a href="/logout" class="btn btn-danger ml-auto logout-button">Logout</a>
+
                     </div>
                 </div>
             </div>
@@ -77,9 +82,9 @@
                     <div class="panel-heading">Actions</div>
                     <div class="panel-body">
                         <p>No Previous Runs Found. Please Run your dataset to view the Dashboard.</p>
-                        <button class="custom-button">Upload a File</button>
-                        <button class="custom-button">Run</button>
-                        <button class="custom-button">Analyze</button>
+                        <a href="/upload" class="btn btn-primary custom-button">Upload a File</a>
+                        <a href="/run" class="btn btn-primary custom-button">Run</a>
+                        <a href="/analyze" class="btn btn-primary custom-button">Analyze</a>
                     </div>
                 </div>
             </div>
@@ -91,7 +96,6 @@
             <p>&copy; 2023 Data Nerds. All rights reserved.</p>
         </div>
     </footer>
-
 
     <!-- Include Bootstrap JS and jQuery (optional) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

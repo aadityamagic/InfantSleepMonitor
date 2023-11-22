@@ -48,6 +48,9 @@
         .custom-button:active {
             background-color: #00a74a; /* Green color for active state */
         }
+        .logout-button {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -64,6 +67,7 @@
                         <a href="/analytics" class="btn btn-primary mx-2">Analytics</a>
                         <a href="/about" class="btn btn-primary mx-2">About</a>
                         <a href="/profile" class="btn btn-primary mx-2">Profile</a>
+                        <a href="/logout" class="btn btn-danger ml-2 logout-button">Logout</a>
                     </div>
                 </div>
             </div>
@@ -77,9 +81,9 @@
                     <div class="panel-heading">Analytics</div>
                     <div class="panel-body">
                         <p>Welcome to our analytics page. Here you can view and analyze sleep data for children and infants.</p>
-                        <button class="custom-button">View Data</button>
-                        <button class="custom-button">Generate Reports</button>
-                        <button class="custom-button">Export Data</button>
+                        <a href="/view_data" class="custom-button">View Data</a>
+                        <a class="custom-button">Generate Reports</a>
+                        <a class="custom-button">Export Data</a>
                     </div>
                 </div>
             </div>
