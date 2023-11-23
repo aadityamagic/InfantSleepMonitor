@@ -1,6 +1,8 @@
+import json
+import zipfile
 from datetime import datetime
 
-from flask import Flask, render_template, redirect, url_for, request, flash, session, send_file
+from flask import Flask, render_template, redirect, url_for, request, flash, session, send_file, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_mail import Mail, Message
@@ -28,8 +30,8 @@ app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = 'aaditya.a505@gmail.com'
-app.config['MAIL_PASSWORD'] = 'tmdd zplu gcum raec '
+app.config['MAIL_USERNAME'] = 'sleepmonitorwebapp@gmail.com'
+app.config['MAIL_PASSWORD'] = 'sdxh djbq ctyi kkoe '#webapp@11 -->pw
 
 
 
@@ -44,6 +46,7 @@ class User(db.Model):
     reset_token = db.Column(db.String(120), nullable=False)
     two_factor_code=None
     user_token=None
+    path=None
 
 
 ######################################password reset###################################3
@@ -137,7 +140,7 @@ def register():
 
 
 
-@app.route('/')
+
 @app.route('/login')
 @app.route('/login', methods=['POST'])
 def login():
@@ -212,7 +215,7 @@ def profile():
         flash('You need to log in first.', 'warning')
         return redirect(url_for('login'))
 
-
+@app.route('/')
 @app.route('/home')
 def home():
     if 'user_id' in session:
@@ -259,27 +262,166 @@ def upload():
     else:
         flash('You need to log in first.', 'warning')
         return redirect(url_for('login'))
+
+
+
 @app.route('/view_data')
 def view_data():
+    user = User.query.get(session['user_id'])
     # Specify the directory where your data files are stored
-    data_directory = '/home/aaditya/projectFiles/'
+    data_directory = f'/home/aaditya/projectFiles/stage0/{user}'
+    data1=data_directory
+    if not os.path.exists(data_directory) or not os.path.isdir(data_directory):
+        error_message = f"No Data found for user{user}"
+        return render_template('analytics.html', error_message=error_message)
 
     # Get the list of files in the directory
     file_list = os.listdir(data_directory)
 
+    # Separate files and folders
+    files = []
+    folders = []
+
+    for item in file_list:
+        full_path = os.path.join(data_directory, item)
+        if os.path.isdir(full_path):
+            folders.append(item)
+        else:
+            files.append(item)
+
+    # Render the template with the lists of files and folders
+    return render_template('view_data.html', files=files, folders=folders)
+
     # Render the template with the list of files
     return render_template('view_data.html', file_list=file_list)
 
+@app.route('/export_data')
+def export_data():
+    user = User.query.get(session['user_id'])
+    # Specify the directory where your data files are stored
+    data_directory = f'/home/aaditya/projectFiles/stage3/{user}'
+    if not os.path.exists(data_directory) or not os.path.isdir(data_directory):
+        error_message = f"No Data found for user{user}"
+        return render_template('analytics.html', error_message=error_message)
+
+    # Get the list of files in the directory
+    file_list = os.listdir(data_directory)
+
+    # Separate files and folders
+    files = []
+    folders = []
+
+    for item in file_list:
+        full_path = os.path.join(data_directory, item)
+        if os.path.isdir(full_path):
+            folders.append(item)
+        else:
+            files.append(item)
+
+    # Render the template with the lists of files and folders
+    return render_template('export_data.html', files=files, folders=folders)
+
+    # Render the template with the list of files
+    return render_template('export_data.html', file_list=file_list)
+
+def getDataDir():
+    user = User.query.get(session['user_id'])
+    # Specify the directory where your data files are stored
+    return f'/home/aaditya/projectFiles/stage0/{user}'
+
+def getpDataDir():
+    user = User.query.get(session['user_id'])
+    # Specify the directory where your data files are stored
+    return f'/home/aaditya/projectFiles/stage3/{user}'
+####################################################
 @app.route('/download_file/<filename>')
 def download_file(filename):
+    user = User.query.get(session['user_id'])
     # Specify the directory where your data files are stored
-    data_directory = '/home/aaditya/projectFiles/'
+    data_directory = f'/home/aaditya/projectFiles/stage0/{user}'
+    return send_from_directory(data_directory, filename, as_attachment=True)
 
-    # Generate the full path to the requested file
-    file_path = os.path.join(data_directory, filename)
+@app.route('/download_file_data/<filename>')
+def download_file_data(filename):
+    user = User.query.get(session['user_id'])
+    # Specify the directory where your data files are stored
+    data_directory = f'/home/aaditya/projectFiles/stage3/{user}'
+    print("i ma here",data_directory)
+    return send_from_directory(data_directory, filename, as_attachment=True)
+# Route to handle opening folders
+@app.route('/open_folder/<foldername>')
+def open_folder(foldername):
+    # Add logic to handle opening the folder
+    # For example, you might list the contents of the folder
+    # Replace this with your actual logic
+    return f"Opening contents of folder: {foldername}"
 
-    # Use Flask's send_file to send the file for download
-    return send_file(file_path, as_attachment=True)
+@app.route('/open_folder_data/<foldername>')
+def open_folder_data(foldername):
+    # Add logic to handle opening the folder
+    # For example, you might list the contents of the folder
+    # Replace this with your actual logic
+    return f"Opening contents of folder: {foldername}"
+
+# Route to handle downloading the entire folder
+@app.route('/download_folder/<foldername>')
+def download_folder(foldername):
+    folder_path = os.path.join(getDataDir(), foldername)
+
+    # Check if the folder exists
+    if not os.path.exists(folder_path) or not os.path.isdir(folder_path):
+        flash(f"Folder {foldername} not found", 'error')
+        return redirect(url_for('view_data'))
+
+    # Create a ZIP file containing the folder's contents
+    zip_filename = f"{foldername}_raw.zip"
+    zip_path = os.path.join(getDataDir(), zip_filename)
+
+    try:
+        with zipfile.ZipFile(zip_path, 'w') as zip_file:
+            for root, dirs, files in os.walk(folder_path):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    arcname = os.path.relpath(file_path, folder_path)
+                    zip_file.write(file_path, arcname=arcname)
+
+        # Return the ZIP file to the user for download
+        return send_from_directory(getDataDir(), zip_filename, as_attachment=True)
+
+    finally:
+        # Remove the temporary ZIP file
+        os.remove(zip_path)
+
+@app.route('/download_folder_data/<foldername>')
+def download_folder_data(foldername):
+    print('=================',foldername,getpDataDir())
+    folder_path = os.path.join(getpDataDir(), foldername)
+
+    # Check if the folder exists
+    if not os.path.exists(folder_path) or not os.path.isdir(folder_path):
+        flash(f"Folder {foldername} not found", 'error')
+        return redirect(url_for('view_data'))
+
+    # Create a ZIP file containing the folder's contents
+    zip_filename = f"{foldername}_processed.zip"
+    zip_path = os.path.join(getpDataDir(), zip_filename)
+
+    try:
+        with zipfile.ZipFile(zip_path, 'w') as zip_file:
+            for root, dirs, files in os.walk(folder_path):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    arcname = os.path.relpath(file_path, folder_path)
+                    zip_file.write(file_path, arcname=arcname)
+
+        # Return the ZIP file to the user for download
+        return send_from_directory(getpDataDir(), zip_filename, as_attachment=True)
+
+    finally:
+        # Remove the temporary ZIP file
+        os.remove(zip_path)
+###################################################
+
 
 @app.route('/about')
 def about():
@@ -290,7 +432,21 @@ def about():
         flash('You need to log in first.', 'warning')
         return redirect(url_for('login'))
 
+@app.route('/run')
+def run():
+    if 'user_id' in session:
+        user = User.query.get(session['user_id'])
+        flash('Run initiated check analytics', 'info')
+        message = f'Run started by: {user} \n File location: {getDataDir()}'
+        write_to_file(message, file_location=f'/home/aaditya/projectFiles/temp/{user}.json')
+        return render_template('homepage.html', the_title='Homepage',message='Run initiated check analytics page')
+    else:
+        flash('You need to log in first.', 'warning')
+        return redirect(url_for('login'))
 
+def write_to_file(message, file_location):
+    with open(file_location, 'a') as file:
+        file.write(json.dumps(message) + '\n')
 
 if __name__ == '__main__':
     app.run(debug=True)

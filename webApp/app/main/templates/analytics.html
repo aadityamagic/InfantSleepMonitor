@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Data Nerds - Analytics</title>
@@ -51,6 +51,11 @@
         .logout-button {
             margin-top: 10px;
         }
+        /* Additional styles for error message */
+        .error-container {
+            text-align: center;
+            margin-top: 50px;
+        }
     </style>
 </head>
 <body>
@@ -80,10 +85,18 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Analytics</div>
                     <div class="panel-body">
-                        <p>Welcome to our analytics page. Here you can view and analyze sleep data for children and infants.</p>
-                        <a href="/view_data" class="custom-button">View Data</a>
-                        <a class="custom-button">Generate Reports</a>
-                        <a class="custom-button">Export Data</a>
+                        {% if error_message %}
+                            <div class="alert alert-danger error-container" role="alert">
+                                <p>{{ error_message }}</p>
+                                <a href="/home" class="btn btn-primary">Go Back to Home</a>
+                            </div>
+                        {% else %}
+                            <!-- Your existing content goes here -->
+                            <p>Welcome to our analytics page. Here you can view and analyze sleep data for children and infants.</p>
+                            <a href="/view_data" class="custom-button">View Data</a>
+                            <a class="custom-button">Generate Reports</a>
+                            <a href="/export_data" class="custom-button">Export Data</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
