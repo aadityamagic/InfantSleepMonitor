@@ -2,20 +2,81 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
+    <title>Data Nerds - Analytics</title>
     <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        /* Add your custom styles for the profile page here */
-        .profile-container {
+        .logo {
+            max-width: 100px;
+        }
+        .header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+        .nav-options {
             margin-top: 30px;
+        }
+        .content {
+            min-height: calc(100vh - 160px); /* Adjust according to your header and footer heights */
+        }
+        .footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+        .image-container {
+            text-align: left;
+        }
+        .custom-button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .custom-button:hover {
+            background-color: #0056b3;
+        }
+        .custom-button:active {
+            background-color: #00a74a; /* Green color for active state */
+        }
+        .logout-button {
+            margin-top: 10px;
+        }
+        /* Additional styles for error message */
+        .error-container {
+            text-align: center;
+            margin-top: 50px;
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <!-- Header content remains the same as in your original HTML -->
+   <header class="header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <img src="../static/placeholder.jpg" alt="Data Nerds Logo" class="logo">
+                </div>
+                <div class="col-md-8 text-left">
+                    <h1>Sleep Analytics for Children and Infants</h1>
+                    <div class="nav-options mt-3">
+                        <a href="/home" class="btn btn-primary mx-2">Home</a>
+                        <a href="/analytics" class="btn btn-primary mx-2">Analytics</a>
+                        <a href="/about" class="btn btn-primary mx-2">About</a>
+                        <a href="/profile" class="btn btn-primary mx-2">Profile</a>
+                        <a href="/logout" class="btn btn-danger ml-2 logout-button">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
 
     <div class="container content">
@@ -26,7 +87,7 @@
                     <div class="panel-body">
                         <p><strong>Username:</strong> {{ user.username }}</p>
                         <p><strong>Email:</strong> {{ user.email }}</p>
-                        <!-- You can display additional user information here -->
+
                     </div>
                 </div>
             </div>
@@ -34,10 +95,12 @@
     </div>
 
     <footer class="footer">
-        <!-- Footer content remains the same as in your original HTML -->
+        <div class="container">
+            <p>&copy; 2023 Data Nerds. All rights reserved.</p>
+        </div>
     </footer>
 
-    <!-- Include Bootstrap JS and jQuery (optional) -->
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

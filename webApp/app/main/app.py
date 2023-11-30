@@ -1,3 +1,4 @@
+import csv
 import json
 import zipfile
 from datetime import datetime
@@ -150,7 +151,7 @@ def login():
         password = request.form.get("password")
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password, password):
-            User.two_factor_code = secrets.token_hex(5)  # Change the length as needed
+            User.two_factor_code = secrets.token_hex(3)  # Change the length as needed
 
 
 
@@ -432,17 +433,29 @@ def about():
         flash('You need to log in first.', 'warning')
         return redirect(url_for('login'))
 
-@app.route('/run')
-def run():
+
+@app.route('/plot')
+def plot():
     if 'user_id' in session:
         user = User.query.get(session['user_id'])
         flash('Run initiated check analytics', 'info')
         message = f'Run started by: {user} \n File location: {getDataDir()}'
         write_to_file(message, file_location=f'/home/aaditya/projectFiles/temp/{user}.json')
-        return render_template('homepage.html', the_title='Homepage',message='Run initiated check analytics page')
+        data = read_csv_data(f'/home/aaditya/projectFiles/stage3/<User 13>/2023-11-22/test.csv')
+        return render_template('plot.html', labels=data['labels'],values=data['values'])
     else:
         flash('You need to log in first.', 'warning')
         return redirect(url_for('login'))
+
+def read_csv_data(file_path):
+    with open(file_path, 'r') as file:
+        reader = csv.DictReader(file)
+        data = {'labels': [], 'values': []}
+        for row in reader:
+            if row['timestamp'] and row['event']:
+                data['labels'].append(row['timestamp'])
+                data['values'].append(row['event'].replace("onset","0").replace("wakeup","1"))
+    return data
 
 def write_to_file(message, file_location):
     with open(file_location, 'a') as file:
